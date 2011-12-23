@@ -1,5 +1,4 @@
-(require 'leiningen.core
-         ['clojure.contrib.str-utils2 :as 'str]
+(require ['clojure.contrib.str-utils2 :as 'str]
          ['clojure.contrib.shell-out :as 'shell])
 
 
