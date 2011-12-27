@@ -1,4 +1,4 @@
-(ns partner_test.activemq
+(ns partner-test.activemq
   (:import org.apache.activemq.ActiveMQConnectionFactory
            javax.jms.Session
            javax.jms.DeliveryMode))

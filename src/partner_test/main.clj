@@ -1,5 +1,5 @@
-(ns partner_test.main
-  (:use [partner_test.core])
+(ns partner-test.main
+  (:use [partner-test.core])
   (:require [clojure.main :as clj])
   (:gen-class))
 
@@ -11,4 +11,4 @@
 
 (defn -main [& args]
   (usage)
-  (clj/repl :init (fn [] (use 'partner_test.core))))
+  (clj/repl :init (fn [] (use 'partner-test.core))))

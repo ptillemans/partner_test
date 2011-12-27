@@ -1,6 +1,6 @@
-(ns partner_test.core
-  (:use partner_test.postgres
-        partner_test.activemq))
+(ns partner-test.core
+  (:use partner-test.postgres
+        partner-test.activemq))
 
 (defn- trigger-wafermap [session wafermap partner]
   (let [msg (create-bytemessage session

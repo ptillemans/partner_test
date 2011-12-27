@@ -1,4 +1,4 @@
-(ns partner_test.postgres
+(ns partner-test.postgres
   (:use clojure.contrib.sql))
 
 (defn valid-wafermaps [& {:keys [lotname hostname port database user password]
