@@ -1,6 +1,8 @@
 (ns partner-test.ftpclient
-  (:use [clj-time core coerce])
-  (:import org.apache.commons.net.ftp.FTPClient))
+  (:use [clj-time
+         [core :only [now interval in-secs]]
+         [coerce :only [from-long]]])
+  (:import (org.apache.commons.net.ftp FTPClient FTPClientConfig)))
 
 (def *ftp-client*)
 
@@ -10,6 +12,9 @@
   `(binding [*ftp-client* (FTPClient.)]
      (try
        (doto *ftp-client*
+         (.configure
+          (doto (FTPClientConfig.)
+            (.setServerTimeZoneId "GMT")))
          (.connect ~host)
          (.login ~username ~password))
        ~@body
@@ -44,3 +49,10 @@
    (filter
     #(recent? % max-age)
     (.listFiles *ftp-client*))))
+
+(defn list-recent-ftpfiles
+  "Return a list of ftp-files object from the current directory which are less than max-age seconds old."
+  [max-age]
+  (filter
+   #(recent? % max-age)
+   (.listFiles *ftp-client*)))
