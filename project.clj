@@ -8,5 +8,6 @@
                  [commons-net "3.0.1"]
                  [clj-time "0.3.3"]
                 ]
-  :dev-dependencies [[org.clojars.ptillemans/lein-cuke "0.0.4-SNAPSHOT"]]
+  :dev-dependencies [[org.clojars.ptillemans/lein-cuke "0.0.4"]
+                     [org.apache.tools/ant "1.8.2"]]
   :main partner_test.main)
