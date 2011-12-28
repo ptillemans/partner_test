@@ -8,7 +8,7 @@
                                user "jboss"
                                password "jboss"}}]
 
-  (let [query (str "select l.lotnumber as lotname, l.item as item, w.wafernumber as wafer, wmap.filename as filename, wmap.wafermap as wafermap
+  (let [query (str "select distinct l.lotnumber as lotname, l.item as item, w.wafernumber as wafer, wmap.filename as filename, wmap.wafermap as wafermap
                     from wafermap wmap
                            left outer join validationerror v on v.wafermap_id = wmap.id,
                          wafer w,

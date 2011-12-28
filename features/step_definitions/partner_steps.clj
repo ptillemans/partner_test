@@ -7,10 +7,8 @@
 
 (import [java.net URI URLDecoder])
 
-(def server-offset 3600)
-
+(def broker-url (ref "tcp://ewaf-uat.colo.elex.be:61616"))
 (def lots (ref {}))
-
 (def locations (ref {}))
 
 (defn reset-all! []
@@ -75,7 +73,7 @@
   [location max-age]
   (with-ftp (:host location) (:user location) (:password location)
     (change-working-directory (:directory location))
-    (list-recent-files (+ max-age server-offset)))) ; server-offset is a dirty hack !!!!
+    (list-recent-files max-age))) ; server-offset is a dirty hack !!!!
 
 (defn list-confirmed-files
   "Return a list names of all files at that loactaion"
@@ -87,6 +85,8 @@
 (defn count-matching-uploaded-files
   "List the files in the directory moved to after confirmation and count the ones matching a given reg-ex"
   [location regex max-age]
+  (println "Loaction : " location)
+  (println "searching for files like " regex " no older than " max-age)
   (count
    (filter #(re-matches regex %)
            (list-uploaded-files (@locations location) max-age))))
@@ -124,14 +124,13 @@
 
 (Given #"Lot (.*) is shipped to (.*)"
        (fn [lot partner]
-         (trigger {lot partner} :brokerurl "tcp://partner-uat.elex.be:61616")))
+         (trigger {lot partner} :brokerurl @broker-url)))
 
 (Given #"I expect (.*) confirmed files like (.*) within (.*) seconds from (.*)"
        (fn [n template timeout partner]
          (let [nr-wafers (Integer/parseInt n)
                regex (re-pattern template)
                nr-found (count-matching-confirmed-files partner regex)]
-           (println (str n ", " template ", " timeout ", " partner))
            (println (str "    Expected : " nr-wafers ", Found : " nr-found ))
            (assert (= nr-wafers nr-found)))))
 
@@ -141,9 +140,10 @@
          (let [nr-wafers (Integer/parseInt n)
                regex (re-pattern template)
                nsecs (Integer/parseInt timeout)]
+
            (defn expected-equals-actual []
              (let [nr-found (count-matching-uploaded-files partner regex nsecs)]
-               (println (str "    Expected : " nr-wafers ", Found : " nr-found ))
+               (println (str "    Expected : " nr-wafers ", Found : " nr-found " at " (now) ))
                (= nr-wafers nr-found)))
 
            (assert-with-retry expected-equals-actual nsecs))))
