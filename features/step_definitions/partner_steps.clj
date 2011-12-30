@@ -1,4 +1,4 @@
-(use '(partner-test core ftpclient))
+(use '(partner-test core ftpclient exceptions))
 (use '(clojure.contrib str-utils))
 (use '[clojure.string :only (blank?)])
 (use 'clojure.test)
@@ -7,7 +7,7 @@
 
 (import [java.net URI URLDecoder])
 
-(def broker-url (ref "tcp://ewaf-uat.colo.elex.be:61616"))
+(def broker-url (atom "tcp://ewaf-test.colo.elex.be:61616"))
 (def lots (ref {}))
 (def locations (ref {}))
 
@@ -108,6 +108,9 @@
       (assert (before? (now) deadline))
       (Thread/sleep 5000))))
 
+(Given #"Broker is listening at (.*)"
+       (fn [url]
+         (reset! broker-url url)))
 
 (Given #"Lot (.*) of device (.*) with wafer results (.*)"
        (fn
@@ -147,4 +150,8 @@
                (= nr-wafers nr-found)))
 
            (assert-with-retry expected-equals-actual nsecs))))
+
+
+(Given #"an 0(useexception occurs with message (.*)"
+       send-exception-message)
 

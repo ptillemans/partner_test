@@ -6,18 +6,24 @@
 
 (def *ftp-client*)
 
+(defn ftp-login
+  "Login to current ftp session. Returns true if successfull"
+  [host user password]
+  (doto *ftp-client*
+    (.configure
+     (doto (FTPClientConfig.)
+       (.setServerTimeZoneId "GMT")))
+    (.connect host)
+    (.login user password)))
+
 (defmacro with-ftp
   "Execute body within the context of an ftp connection"
   [host username password & body]
   `(binding [*ftp-client* (FTPClient.)]
      (try
-       (doto *ftp-client*
-         (.configure
-          (doto (FTPClientConfig.)
-            (.setServerTimeZoneId "GMT")))
-         (.connect ~host)
-         (.login ~username ~password))
-       ~@body
+       (if (ftp-login ~host ~username ~password)
+         (do ~@body)
+         (throw (Exception. (str "Unable to login to " ~host " as " ~username))))
        (finally
         (.disconnect *ftp-client*)))))
 

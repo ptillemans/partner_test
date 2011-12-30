@@ -10,29 +10,40 @@ Feature: Send Wafermaps
 #  When Lot B89476 is shipped to O_CARSEM2
 #  Then I expect 24 uploaded files like B89476.* within 120 seconds for O_CARSEM2
 
+# @uat
+# Background:
+#   Given Broker is listening at tcp://ewaf-uat.colo.elex.be:61616
+#   Given Partner O_CARSEM2 expects wafermaps at location ftp://carsem@openft-uat.elex.be:21/?directory=/wafermaps/s-site&password=carsem&move=/confirmed/s-site&delay=900000&disconnect=true
+#   Given Partner O_CARSEM1 expects wafermaps at location ftp://carsem@openft-uat.elex.be:21/?password=carsem&directory=wafermaps/m-site&disconnect=true
+#   Given Partner O_AMKOR_P3 expects wafermaps at location ftp://amkor@openft-uat.elex.be:21/?password=amkor&disconnect=true
+#   Given Partner O_ISPL expects wafermaps at location ftp://ispl@openft-uat.elex.be:21/?password=6gZ5flFv&disconnect=true
+#   Given Partner O_UNISEM expects wafermaps at location ftp://unisem@openft-uat.elex.be:21/?password=wrinweho&disconnect=true
+
 Background:
-  Given Partner O_CARSEM2 expects wafermaps at location ftp://carsem@openft-uat.elex.be:21/?directory=/wafermaps/s-site&password=carsem&move=/confirmed/s-site&delay=900000&disconnect=true
-  Given Partner O_CARSEM1 expects wafermaps at location ftp://carsem@openft-uat.elex.be:21/?password=carsem&directory=wafermaps/m-site&disconnect=true
-  Given Partner O_AMKOR_P3 expects wafermaps at location ftp://amkor@openft-uat.elex.be:21/?password=amkor&disconnect=true
-  Given Partner O_ISPL expects wafermaps at location ftp://ispl@openft-uat.elex.be:21/?password=6gZ5flFv&disconnect=true
-  Given Partner O_UNISEM expects wafermaps at location ftp://unisem@openft-uat.elex.be:21/?password=wrinweho&disconnect=true
+  Given Broker is listening at tcp://ewaf-test.colo.elex.be:61616
+  Given Partner O_CARSEM2 expects wafermaps at location ftp://carsem@openft-test.elex.be:21/?directory=/wafermaps/s-site&password=carsem&move=/confirmed/s-site&delay=900000&disconnect=true
+  Given Partner O_CARSEM1 expects wafermaps at location ftp://carsem@openft-test.elex.be:21/?password=carsem&directory=wafermaps/m-site&disconnect=true
+  Given Partner O_AMKOR_P3 expects wafermaps at location ftp://amkor@openft-test.elex.be:21/?password=amkor&disconnect=true
+  Given Partner O_ISPL expects wafermaps at location ftp://ispl@openft-test.elex.be:21/?password=6gZ5flFv&disconnect=true
+  Given Partner O_UNISEM expects wafermaps at location ftp://unisem@openft-test.elex.be:21/?password=wrinweho&disconnect=true
 
-
+@smoke_test
 Scenario: Shipment to Carsem2
   When Lot B89476 is shipped to O_CARSEM2
-  Then I expect 24 uploaded files like B89476.* within 60 seconds for O_CARSEM2
+  Then I expect 24 uploaded files like B89476.* within 240 seconds for O_CARSEM2
 
+@carsem
 Scenario: Shipment UMC wafers to Carsem2
   When Lot HM9PF is shipped to O_CARSEM2
-  Then I expect 25 uploaded files like HM9PF.* within 60 seconds for O_CARSEM2
-
+  Then I expect 25 uploaded files like HM9PF.* within 240 seconds for O_CARSEM2
+@carsem
 Scenario: Shipment UMC wafers of a split lot to Carsem2
   When Lot HN4T7X2 is shipped to O_CARSEM2
-  Then I expect 17 uploaded files like HN4T7.* within 60 seconds for O_CARSEM2
-
+  Then I expect 17 uploaded files like HN4T7.* within 240 seconds for O_CARSEM2
+@carsem
 Scenario: Shipment to Carsem1
   When Lot T38910 is shipped to O_CARSEM1
-  Then I expect 22 uploaded files like T38910-\d\d-.* within 60 seconds for O_CARSEM1
+  Then I expect 22 uploaded files like T38910-\d\d-.* within 240 seconds for O_CARSEM1
 
 
 Scenario Outline: Rest of test lots for Erfurt
